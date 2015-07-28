@@ -26,8 +26,10 @@
       $('form').submit(function(){
         if($('#m').val() != ''){
           if(sessionStorage.getItem("nick") != '' && sessionStorage.getItem("nick") != null){
+            $('#messages').append($('<li>').text(sessionStorage.getItem("nick") + ' says: ' + $('#m').val()));
             socket.emit('chat message', sessionStorage.getItem("nick") + ' says: ' + $('#m').val());
           }else{
+            $('#messages').append($('<li>').text('unknown user says: ' + $('#m').val()));
             socket.emit('chat message', 'unknown user says: ' + $('#m').val());
           }
         }
