@@ -1,0 +1,66 @@
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>jQuery UI Dialog - Modal form</title>
+  <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
+  <script src="//code.jquery.com/jquery-1.10.2.js"></script>
+  <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+  <style>
+    body { font-size: 62.5%; }
+    label, input { display:block; }
+    input.text { margin-bottom:12px; width:95%; padding: .4em; }
+    fieldset { padding:0; border:0; margin-top:25px; }
+  </style>
+  <script>
+  $(function() {
+
+    sessionStorage.clear();
+
+    function saveNick(){
+      if (document.getElementById("nick").value != '' || checkNickNameSetted()){
+        sessionStorage.setItem("nick", document.getElementById("nick").value);
+        dialog.dialog( "close" );
+        window.location.replace("/chat");
+      }else{
+        return false;
+      }
+    }
+
+    function checkNickNameSetted(){
+      if(sessionStorage.getItem("nick") !== '' && sessionStorage.getItem("nick") !== null){
+          return true;
+      }
+      return false;
+    }
+
+    dialog = $( "#dialog-form" ).dialog({
+      autoOpen: true,
+      draggable: false,
+      resizable: false,
+      closeOnEscape: false,
+      height: 300,
+      width: 350,
+      modal: true,
+      beforeClose: checkNickNameSetted,
+      buttons: {
+        "Send": saveNick
+      }
+    });
+  });
+  </script>
+</head>
+<body>
+
+  <div id="dialog-form" title="Select your nick">
+
+    <form>
+      <fieldset>
+        <label for="nick">Nick</label>
+        <input type="text" name="nick" id="nick" class="text ui-widget-content ui-corner-all">
+        <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+      </fieldset>
+    </form>
+  </div>
+
+</body>
+</html>

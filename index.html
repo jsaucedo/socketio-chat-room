@@ -24,7 +24,13 @@
     <script>
       var socket = io();
       $('form').submit(function(){
-        socket.emit('chat message', $('#m').val());
+        if($('#m').val() != ''){
+          if(sessionStorage.getItem("nick") != '' && sessionStorage.getItem("nick") != null){
+            socket.emit('chat message', sessionStorage.getItem("nick") + ' says: ' + $('#m').val());
+          }else{
+            socket.emit('chat message', 'unknown user says: ' + $('#m').val());
+          }
+        }
         $('#m').val('');
         return false;
       });
