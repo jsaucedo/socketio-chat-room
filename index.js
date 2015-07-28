@@ -8,17 +8,17 @@ app.get('/', function(req, res){
 
 io.on('connection', function(socket){
   console.log('a user connected');
+  io.emit('connection message', 'a new user is connected');
   socket.on('disconnect', function(){
     console.log('user disconnected');
+    io.emit('connection message', 'a user disconnected');
   });
   socket.on('chat message', function(msg){
-   console.log('message: ' + msg);
-  });
-  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
     io.emit('chat message', msg);
   });
 });
 
-http.listen(3000, function(){
-  console.log('listening on *:3000');
+http.listen(3001, function(){
+  console.log('listening on *:3001');
 });
