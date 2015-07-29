@@ -11,15 +11,19 @@ app.get('/chat', function(req, res){
 });
 
 io.on('connection', function(socket){
-  console.log('a user connected');
+  //on connection emit message
   io.emit('connection message', 'a new user is connected');
+  //on disconnect event emit message
   socket.on('disconnect', function(){
-    console.log('user disconnected');
     io.emit('connection message', 'a user disconnected');
   });
+  //on chat message, broadcast to everyone but sender
   socket.on('chat message', function(msg){
-    console.log('message: ' + msg);
     socket.broadcast.emit('chat message', msg);
+  });
+  //on typing, broadcast everyone but typer
+  socket.on("typing", function(data) {
+      socket.broadcast.emit("typing", {typing: data.typing, msg: data.who + ' is typing..'});
   });
 });
 
