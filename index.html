@@ -15,17 +15,35 @@
     </style>
   </head>
   <body>
-    <ul id="messages"></ul>
-    <span id="typing"></span>
-    <form action="">
-      <input id="m" autocomplete="off" /><button>Send</button>
-    </form>
+    <div style="width: 100%; overflow: hidden;">
+        <div style="width: 90%; float: left;">
+          <ul id="messages"></ul>
+          <span id="typing"></span>
+          <form action="">
+            <input id="m" autocomplete="off" /><button>Send</button>
+          </form>
+        </div>
+        <div style="margin-left: 90%;">
+          <div style="background: black; font: 20px Helvetica, Arial; color: white;">
+            Online Users
+          </div>
+          <div>
+            <ul id="online-users"></ul>
+          </div>
+        </div>
+    </div>
 
     <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
     <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
     <script>
       //connecting to server
-      var socket = io();
+      var socket;
+      if(sessionStorage.getItem("nick") != '' && sessionStorage.getItem("nick") != null){
+        socket = io('', {query: 'user=' + sessionStorage.getItem("nick")});
+      }else{
+        socket = io('', {query: 'user=unknown'});
+      }
+
       //sending messages onsubmit event
       $('form').submit(function(){
         if($('#m').val() != ''){
@@ -44,13 +62,21 @@
         $('#m').val('');
         return false;
       });
+      
       //appending incoming messages to html
       socket.on('chat message', function(msg){
         $('#messages').append($('<li>').text(msg));
       });
+
       //appending incoming connection events
-      socket.on('connection message', function(msg){
-        $('#messages').append($('<li>').text(msg));
+      socket.on('connection', function(data){
+        if(data.connected){
+            $('#messages').append($('<li>').text(data.user + ' is connected'));
+            $('#online-users').append($('<li id="'+data.user+'">').text(data.user));
+        }else{
+            $('#messages').append($('<li>').text(data.user + '  disconnected'));
+            $('#'+data.user).remove();
+        }
       });
 
       //timeout variables and functions for 'user is typing..'

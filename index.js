@@ -11,11 +11,11 @@ app.get('/chat', function(req, res){
 });
 
 io.on('connection', function(socket){
-  //on connection emit message
-  io.emit('connection message', 'a new user is connected');
-  //on disconnect event emit message
+  //on connection broadcast message
+  socket.broadcast.emit('connection', {connected: true, user: socket.handshake.query.user});
+  //on disconnect event broadcast message
   socket.on('disconnect', function(){
-    io.emit('connection message', 'a user disconnected');
+    socket.broadcast.emit('connection', {connected: false, user: socket.handshake.query.user});
   });
   //on chat message, broadcast to everyone but sender
   socket.on('chat message', function(msg){
