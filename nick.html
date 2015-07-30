@@ -16,9 +16,10 @@
 
     sessionStorage.clear();
 
-    function saveNick(){
+    function saveNickAndRoom(){
       if (document.getElementById("nick").value != '' || checkNickNameSetted()){
         sessionStorage.setItem("nick", document.getElementById("nick").value);
+        sessionStorage.setItem("namespace", document.getElementById("namespace").value);
         dialog.dialog( "close" );
         window.location.replace("/chat");
       }else{
@@ -43,24 +44,27 @@
       modal: true,
       beforeClose: checkNickNameSetted,
       buttons: {
-        "Send": saveNick
+        "Send": saveNickAndRoom
       }
     });
   });
   </script>
 </head>
 <body>
-
   <div id="dialog-form" title="Select your nick">
-
     <form>
       <fieldset>
         <label for="nick">Nick</label>
         <input type="text" name="nick" id="nick" class="text ui-widget-content ui-corner-all">
         <input type="submit" tabindex="-1" style="position:absolute; top:-1000px">
+        <br />
+        <label for="namespace">Select a chat room</label>
+        <select id="namespace" name="namespace">
+          <option value="chat">Chat</option>
+          <option value="school" selected>School</option>
+        </select>
       </fieldset>
     </form>
   </div>
-
 </body>
 </html>
