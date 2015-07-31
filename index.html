@@ -73,7 +73,7 @@
       socket.on('connection', function(data){
         if(data.connected){
             $('#messages').append($('<li>').text(data.user + ' is connected to ' + data.namespace));
-            $('#online-users').append($('<li id="'+data.user+'">').text(data.user));
+            $('#online-users').append($('<li id="'+data.user+'"><a href="#" onclick="openPrivateChat();">' + data.user + '</a>'));
         }else{
             $('#messages').append($('<li>').text(data.user + '  disconnected'));
             $('#'+data.user).remove();
@@ -113,6 +113,11 @@
           $('#typing').text('');
         }
       });
+
+      //opening private chat rooms on separate windows
+      function openPrivateChat(){
+        window.open('/chat', 'Private Chat', "height=400,width=400");
+      }
     </script>
   </body>
 </html>

@@ -30,9 +30,7 @@ schoolSocket.on('connection', function(socket){
   online_users_school.push(socket.handshake.query.user);
 
   socket.on('ready', function() {
-    console.log('socket ready' + online_users_school);
     online_users_school.forEach(function(user, index) {
-      console.log('recorriendo array: ' + user);
       socket.emit('connection', {connected: true, user: user, namespace: schoolSocket.name +' namespace'});
     });
   });
